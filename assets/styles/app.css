@@ -202,7 +202,7 @@ a:hover {
     display: flex;
     gap: 1.25rem;
     width: max-content;
-    animation: marquee-scroll 35s linear infinite;
+    animation: marquee-scroll 55s linear infinite;
 }
 
 .cover-marquee:hover .cover-marquee-track {
@@ -220,7 +220,7 @@ a:hover {
 }
 
 .cover-marquee-item img {
-    height: 220px;
+    height: 320px;
     width: auto;
     border-radius: var(--radius-sm);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
