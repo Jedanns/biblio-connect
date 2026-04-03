@@ -22,7 +22,7 @@ class FavoriteController extends AbstractController
         FavoriteRepository $favoriteRepository,
         EntityManagerInterface $em,
     ): Response {
-        if (!$this->isCsrfTokenValid('favorite' . $book->getId(), $request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('favorite' . $book->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 

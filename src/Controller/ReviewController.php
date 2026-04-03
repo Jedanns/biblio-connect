@@ -32,7 +32,7 @@ class ReviewController extends AbstractController
             return $redirect;
         }
 
-        if (!$this->isCsrfTokenValid('review' . $book->getId(), $request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('review' . $book->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 

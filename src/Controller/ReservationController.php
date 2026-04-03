@@ -64,7 +64,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('app_profile_reservations');
         }
 
-        if (!$this->isCsrfTokenValid('cancel' . $reservation->getId(), $request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('cancel' . $reservation->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 

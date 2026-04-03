@@ -74,7 +74,7 @@ class AdminController extends AbstractController
     #[Route('/reviews/{id}/approve', name: 'app_admin_review_approve', methods: ['POST'])]
     public function reviewApprove(Review $review, Request $request, EntityManagerInterface $em): Response
     {
-        if (!$this->isCsrfTokenValid('approve' . $review->getId(), $request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('approve' . $review->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 
@@ -88,7 +88,7 @@ class AdminController extends AbstractController
     #[Route('/reviews/{id}/reject', name: 'app_admin_review_reject', methods: ['POST'])]
     public function reviewReject(Review $review, Request $request, EntityManagerInterface $em): Response
     {
-        if (!$this->isCsrfTokenValid('reject' . $review->getId(), $request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('reject' . $review->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 
@@ -122,7 +122,7 @@ class AdminController extends AbstractController
         Request $request,
         ReservationService $reservationService,
     ): Response {
-        if (!$this->isCsrfTokenValid('activate' . $reservation->getId(), $request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('activate' . $reservation->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 
@@ -138,7 +138,7 @@ class AdminController extends AbstractController
         Request $request,
         ReservationService $reservationService,
     ): Response {
-        if (!$this->isCsrfTokenValid('return' . $reservation->getId(), $request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('return' . $reservation->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 

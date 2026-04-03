@@ -117,7 +117,7 @@ class CatalogController extends AbstractController
         EntityManagerInterface $em,
         FileUploader $fileUploader,
     ): Response {
-        if (!$this->isCsrfTokenValid('delete' . $book->getId(), $request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('delete' . $book->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 

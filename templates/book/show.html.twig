@@ -107,13 +107,14 @@
                 <input type="hidden" name="_token" value="{{ csrf_token('review' ~ book.id) }}">
                 <div class="mb-3">
                     <label class="form-label">Note</label>
-                    <div class="star-rating" style="font-size: 1.3rem;">
+                    <div class="star-picker" id="starPicker">
                         {% for i in 1..5 %}
-                            <label style="cursor: pointer; margin-right: 0.25rem;">
-                                <input type="radio" name="rating" value="{{ i }}" style="display: none;" {{ i == 5 ? 'checked' : '' }} required>
-                                <span>{{ i }} &#9733;</span>
+                            <label class="star-picker-star" data-value="{{ i }}">
+                                <input type="radio" name="rating" value="{{ i }}" {{ i == 5 ? 'checked' : '' }} required>
+                                <span>&#9733;</span>
                             </label>
                         {% endfor %}
+                        <span class="star-picker-label" id="starLabel">5/5</span>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -145,4 +146,29 @@
         <p class="text-muted" style="font-style: italic;">Aucun avis pour le moment. Soyez le premier !</p>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const picker = document.getElementById('starPicker');
+    if (!picker) return;
+
+    const stars = picker.querySelectorAll('.star-picker-star');
+    const label = document.getElementById('starLabel');
+
+    function update(value) {
+        stars.forEach(function(s) {
+            s.classList.toggle('active', parseInt(s.dataset.value) <= value);
+        });
+        if (label) label.textContent = value + '/5';
+    }
+
+    stars.forEach(function(star) {
+        star.addEventListener('click', function() {
+            update(parseInt(this.dataset.value));
+        });
+    });
+
+    update(5);
+});
+</script>
 {% endblock %}

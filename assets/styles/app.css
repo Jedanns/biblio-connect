@@ -379,7 +379,7 @@ a:hover {
     transform: translateX(4px);
 }
 
-/* --- Star Rating --- */
+/* --- Star Rating (display) --- */
 .star-rating {
     color: var(--color-gold);
     font-size: 1rem;
@@ -388,6 +388,43 @@ a:hover {
 
 .star-rating .star-empty {
     color: var(--color-border);
+}
+
+/* --- Star Picker (input) --- */
+.star-picker {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.star-picker-star {
+    cursor: pointer;
+    font-size: 1.8rem;
+    color: var(--color-border);
+    transition: color 0.15s, transform 0.15s;
+    line-height: 1;
+}
+
+.star-picker-star:hover {
+    transform: scale(1.15);
+}
+
+.star-picker-star input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.star-picker-star.active {
+    color: var(--color-gold);
+}
+
+.star-picker-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-mute);
+    margin-left: 0.75rem;
 }
 
 /* --- Search / Filter Bar --- */
