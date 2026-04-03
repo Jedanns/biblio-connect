@@ -5,17 +5,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}BiblioConnect{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>📚</text></svg>">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
         {% block stylesheets %}{% endblock %}
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
     <body class="d-flex flex-column min-vh-100">
+        <div class="grain-overlay"></div>
+
         {% include '_partials/_navbar.html.twig' %}
 
-        <main class="container py-4 flex-grow-1">
-            {% include '_partials/_flash_messages.html.twig' %}
-            {% block body %}{% endblock %}
+        <main class="flex-grow-1">
+            <div class="container py-5">
+                {% include '_partials/_flash_messages.html.twig' %}
+                {% block body %}{% endblock %}
+            </div>
         </main>
 
         {% include '_partials/_footer.html.twig' %}

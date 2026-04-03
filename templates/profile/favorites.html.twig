@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes favoris - BiblioConnect{% endblock %}
+{% block title %}Mes favoris — BiblioConnect{% endblock %}
 
 {% block body %}
-<h1>Mes favoris</h1>
+<span class="editorial-label">Espace personnel</span>
+<h1 class="mt-2">Mes favoris</h1>
+<hr class="editorial-divider">
 
 {% if favorites|length > 0 %}
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
@@ -14,9 +16,7 @@
     {% endfor %}
 </div>
 {% else %}
-    <div class="alert alert-info">
-        Vous n'avez pas encore de favoris.
-        <a href="{{ path('app_book_index') }}">Parcourir le catalogue</a>
-    </div>
+    <p class="text-muted" style="font-style: italic;">Vous n'avez pas encore de favoris.</p>
+    <a href="{{ path('app_book_index') }}" class="btn btn-editorial btn-editorial-outline mt-2">Parcourir le catalogue</a>
 {% endif %}
 {% endblock %}

@@ -1,22 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes réservations - BiblioConnect{% endblock %}
+{% block title %}Mes réservations — BiblioConnect{% endblock %}
 
 {% block body %}
-<h1>Mes réservations</h1>
+<span class="editorial-label">Espace personnel</span>
+<h1 class="mt-2">Mes réservations</h1>
+<hr class="editorial-divider">
 
 {% if reservations|length > 0 %}
 <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-editorial">
         <thead>
-            <tr>
-                <th>Livre</th>
-                <th>Réservé le</th>
-                <th>Du</th>
-                <th>Au</th>
-                <th>Statut</th>
-                <th>Actions</th>
-            </tr>
+            <tr><th>Livre</th><th>Réservé le</th><th>Du</th><th>Au</th><th>Statut</th><th></th></tr>
         </thead>
         <tbody>
             {% for reservation in reservations %}
@@ -31,7 +26,7 @@
                             <form method="post" action="{{ path('app_reservation_cancel', {id: reservation.id}) }}" class="d-inline"
                                   onsubmit="return confirm('Annuler cette réservation ?')">
                                 <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ reservation.id) }}">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">Annuler</button>
+                                <button type="submit" class="btn btn-editorial btn-editorial-outline btn-sm" style="color: var(--color-danger); border-color: var(--color-danger);">Annuler</button>
                             </form>
                         {% endif %}
                     </td>
@@ -41,6 +36,7 @@
     </table>
 </div>
 {% else %}
-    <div class="alert alert-info">Vous n'avez aucune réservation.</div>
+    <p class="text-muted" style="font-style: italic;">Vous n'avez aucune réservation pour le moment.</p>
+    <a href="{{ path('app_book_index') }}" class="btn btn-editorial btn-editorial-outline mt-2">Parcourir le catalogue</a>
 {% endif %}
 {% endblock %}

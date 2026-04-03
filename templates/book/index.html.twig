@@ -1,31 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Catalogue - BiblioConnect{% endblock %}
+{% block title %}Catalogue — BiblioConnect{% endblock %}
 
 {% block body %}
-<h1 class="mb-4">Catalogue</h1>
+<span class="editorial-label">Collection</span>
+<h1 class="mt-2">Catalogue</h1>
+<hr class="editorial-divider">
 
-<div class="card mb-4">
-    <div class="card-body">
-        {{ form_start(searchForm, {'attr': {'class': 'row g-3 align-items-end'}}) }}
-            <div class="col-md-4">
-                {{ form_row(searchForm.query) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_row(searchForm.category) }}
-            </div>
-            <div class="col-md-3">
-                {{ form_row(searchForm.author) }}
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Rechercher</button>
-            </div>
-        {{ form_end(searchForm) }}
-    </div>
+<div class="search-bar mb-4">
+    {{ form_start(searchForm, {'attr': {'class': 'row g-3 align-items-end'}}) }}
+        <div class="col-md-4">
+            {{ form_row(searchForm.query) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(searchForm.category) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(searchForm.author) }}
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-editorial btn-editorial-primary w-100">Rechercher</button>
+        </div>
+    {{ form_end(searchForm) }}
 </div>
 
 {% if books|length > 0 %}
-    <p class="text-muted">{{ books|length }} résultat{{ books|length > 1 ? 's' : '' }}</p>
+    <p class="text-muted mb-4" style="font-size: 0.85rem;">{{ books|length }} résultat{{ books|length > 1 ? 's' : '' }}</p>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         {% for book in books %}
             <div class="col">
@@ -34,8 +34,9 @@
         {% endfor %}
     </div>
 {% else %}
-    <div class="alert alert-info">
-        Aucun ouvrage trouvé. Essayez de modifier vos critères de recherche.
+    <div class="text-center py-5">
+        <p class="text-muted" style="font-size: 1.1rem;">Aucun ouvrage ne correspond à votre recherche.</p>
+        <a href="{{ path('app_book_index') }}" class="btn btn-editorial btn-editorial-outline mt-2">Réinitialiser</a>
     </div>
 {% endif %}
 {% endblock %}

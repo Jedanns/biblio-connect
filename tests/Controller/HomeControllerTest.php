@@ -19,7 +19,7 @@ class HomeControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/');
 
-        $this->assertSelectorTextContains('h1', 'BiblioConnect');
+        $this->assertSelectorTextContains('h1', 'lecture');
     }
 
     public function testHomepageHasNavigationLinks(): void

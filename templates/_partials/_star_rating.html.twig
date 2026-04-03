@@ -1,4 +1,3 @@
-{# Usage: {% include '_partials/_star_rating.html.twig' with {rating: 4.5} %} #}
 <span class="star-rating">
     {% for i in 1..5 %}
         <span class="{{ i <= rating|round ? '' : 'star-empty' }}">&#9733;</span>

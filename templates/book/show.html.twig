@@ -1,133 +1,148 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ book.title }} - BiblioConnect{% endblock %}
+{% block title %}{{ book.title }} — BiblioConnect{% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col-md-4">
-        {% if book.coverImage %}
-            <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" class="img-fluid rounded shadow-sm" alt="{{ book.title }}">
-        {% else %}
-            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 400px; font-size: 6rem;">
-                📖
-            </div>
-        {% endif %}
+<a href="{{ path('app_book_index') }}" class="btn btn-editorial-ghost mb-4" style="font-size: 0.85rem;">
+    <span style="margin-right: 0.5rem;">&larr;</span> Retour au catalogue
+</a>
+
+<div class="row g-5">
+    <div class="col-lg-5">
+        <div class="book-detail-cover">
+            {% if book.coverImage %}
+                <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" alt="{{ book.title }}">
+            {% else %}
+                <span style="font-size: 6rem; opacity: 0.3;">📖</span>
+            {% endif %}
+        </div>
     </div>
 
-    <div class="col-md-8">
-        <h1>{{ book.title }}</h1>
-        <p class="lead text-muted">par {{ book.author.fullName }}</p>
+    <div class="col-lg-7">
+        <span class="editorial-label">{{ book.language.name }}</span>
+        <h1 class="mt-2" style="font-size: 2.2rem;">{{ book.title }}</h1>
+        <p style="font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--color-text-soft);">
+            par {{ book.author.fullName }}
+        </p>
 
         {% if book.averageRating %}
             <div class="mb-3">
                 {% include '_partials/_star_rating.html.twig' with {rating: book.averageRating} %}
-                <span class="text-muted ms-2">({{ book.approvedReviews|length }} avis)</span>
+                <span class="text-muted ms-2" style="font-size: 0.85rem;">({{ book.approvedReviews|length }} avis)</span>
             </div>
         {% endif %}
 
-        <div class="mb-3">
+        <div class="mb-4">
             {% for category in book.categories %}
-                <span class="badge bg-secondary me-1">{{ category.name }}</span>
+                <span class="tag me-1">{{ category.name }}</span>
             {% endfor %}
-            <span class="badge bg-info">{{ book.language.name }}</span>
         </div>
 
-        <table class="table table-sm" style="max-width: 400px;">
+        <hr class="editorial-divider">
+
+        <div style="max-width: 380px;">
             {% if book.isbn %}
-                <tr><th>ISBN</th><td>{{ book.isbn }}</td></tr>
+                <div class="book-meta-item">
+                    <span class="book-meta-label">ISBN</span>
+                    <span>{{ book.isbn }}</span>
+                </div>
             {% endif %}
             {% if book.publicationDate %}
-                <tr><th>Publication</th><td>{{ book.publicationDate|date('d/m/Y') }}</td></tr>
+                <div class="book-meta-item">
+                    <span class="book-meta-label">Publication</span>
+                    <span>{{ book.publicationDate|date('d/m/Y') }}</span>
+                </div>
             {% endif %}
             {% if book.pageCount %}
-                <tr><th>Pages</th><td>{{ book.pageCount }}</td></tr>
+                <div class="book-meta-item">
+                    <span class="book-meta-label">Pages</span>
+                    <span>{{ book.pageCount }}</span>
+                </div>
             {% endif %}
-            <tr>
-                <th>Disponibilité</th>
-                <td>
-                    {% if book.availableCopies > 0 %}
-                        <span class="text-success fw-bold">{{ book.availableCopies }}/{{ book.totalCopies }} disponible(s)</span>
-                    {% else %}
-                        <span class="text-danger fw-bold">Indisponible</span>
-                    {% endif %}
-                </td>
-            </tr>
-        </table>
+            <div class="book-meta-item" style="border-bottom: none;">
+                <span class="book-meta-label">Disponibilité</span>
+                {% if book.availableCopies > 0 %}
+                    <span class="availability-tag available">{{ book.availableCopies }}/{{ book.totalCopies }}</span>
+                {% else %}
+                    <span class="availability-tag unavailable">Indisponible</span>
+                {% endif %}
+            </div>
+        </div>
 
         {% if book.description %}
-            <h5 class="mt-4">Description</h5>
-            <p>{{ book.description|nl2br }}</p>
+            <div class="mt-4">
+                <span class="editorial-label">Synopsis</span>
+                <p class="mt-2" style="line-height: 1.8; color: var(--color-text-soft);">{{ book.description|nl2br }}</p>
+            </div>
         {% endif %}
 
-        <div class="mt-4 d-flex gap-2">
+        <div class="mt-4 d-flex gap-3">
             {% if app.user %}
                 {% if book.availableCopies > 0 %}
-                    <a href="{{ path('app_reservation_new', {id: book.id}) }}" class="btn btn-primary">Réserver</a>
+                    <a href="{{ path('app_reservation_new', {id: book.id}) }}" class="btn btn-editorial btn-editorial-primary">Réserver cet ouvrage</a>
                 {% endif %}
-
                 <form method="post" action="{{ path('app_favorite_toggle', {id: book.id}) }}">
                     <input type="hidden" name="_token" value="{{ csrf_token('favorite' ~ book.id) }}">
-                    <button type="submit" class="btn {{ isFavorited ? 'btn-warning' : 'btn-outline-warning' }}">
-                        {{ isFavorited ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+                    <button type="submit" class="btn btn-editorial {{ isFavorited ? 'btn-editorial-accent' : 'btn-editorial-outline' }}">
+                        {{ isFavorited ? 'Retirer des favoris' : 'Mettre en favori' }}
                     </button>
                 </form>
             {% else %}
-                <a href="{{ path('app_login') }}" class="btn btn-outline-primary">Connectez-vous pour réserver</a>
+                <a href="{{ path('app_login') }}" class="btn btn-editorial btn-editorial-outline">Se connecter pour réserver</a>
             {% endif %}
         </div>
     </div>
 </div>
 
-{# Section Reviews #}
-<hr class="my-5">
-<h3>Avis des lecteurs</h3>
+{# --- Reviews Section --- #}
+<div class="mt-5 pt-4" style="border-top: 1px solid var(--color-border-light);">
+    <span class="editorial-label">Lecteurs</span>
+    <h2 class="mt-2">Avis</h2>
+    <hr class="editorial-divider">
 
-{% if app.user and not hasReviewed %}
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5>Laisser un avis</h5>
+    {% if app.user and not hasReviewed %}
+        <div class="review-card mb-4" style="border-left: 3px solid var(--color-accent);">
+            <span class="editorial-label mb-3 d-block">Votre avis</span>
             <form method="post" action="{{ path('app_review_new', {bookId: book.id}) }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('review' ~ book.id) }}">
                 <div class="mb-3">
                     <label class="form-label">Note</label>
-                    <div class="star-rating">
+                    <div class="star-rating" style="font-size: 1.3rem;">
                         {% for i in 1..5 %}
-                            <label class="form-check-label me-1">
-                                <input type="radio" name="rating" value="{{ i }}" class="form-check-input" {{ i == 5 ? 'checked' : '' }} required>
-                                {{ i }} &#9733;
+                            <label style="cursor: pointer; margin-right: 0.25rem;">
+                                <input type="radio" name="rating" value="{{ i }}" style="display: none;" {{ i == 5 ? 'checked' : '' }} required>
+                                <span>{{ i }} &#9733;</span>
                             </label>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="comment" class="form-label">Commentaire (optionnel)</label>
-                    <textarea name="comment" id="comment" class="form-control" rows="3" maxlength="2000"></textarea>
+                    <textarea name="comment" id="comment" class="form-control" rows="3" maxlength="2000" placeholder="Partagez votre ressenti..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Publier l'avis</button>
+                <button type="submit" class="btn btn-editorial btn-editorial-primary">Publier</button>
             </form>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
 
-{% set approvedReviews = book.approvedReviews %}
-{% if approvedReviews|length > 0 %}
-    {% for review in approvedReviews %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
+    {% set approvedReviews = book.approvedReviews %}
+    {% if approvedReviews|length > 0 %}
+        {% for review in approvedReviews %}
+            <div class="review-card">
+                <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <strong>{{ review.user.fullName }}</strong>
-                        <span class="text-muted ms-2">{{ review.createdAt|date('d/m/Y') }}</span>
+                        <span class="review-author">{{ review.user.fullName }}</span>
+                        <span class="review-date ms-2">{{ review.createdAt|date('d/m/Y') }}</span>
                     </div>
                     {% include '_partials/_star_rating.html.twig' with {rating: review.rating} %}
                 </div>
                 {% if review.comment %}
-                    <p class="mb-0">{{ review.comment|nl2br }}</p>
+                    <p class="review-comment">{{ review.comment|nl2br }}</p>
                 {% endif %}
             </div>
-        </div>
-    {% endfor %}
-{% else %}
-    <p class="text-muted">Aucun avis pour cet ouvrage.</p>
-{% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="text-muted" style="font-style: italic;">Aucun avis pour le moment. Soyez le premier !</p>
+    {% endif %}
+</div>
 {% endblock %}

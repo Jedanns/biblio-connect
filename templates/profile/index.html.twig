@@ -1,64 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon profil - BiblioConnect{% endblock %}
+{% block title %}Mon profil — BiblioConnect{% endblock %}
 
 {% block body %}
-<h1>Mon profil</h1>
-<p class="lead">Bienvenue, {{ app.user.fullName }}</p>
+<span class="editorial-label">Espace personnel</span>
+<h1 class="mt-2">Bonjour, {{ app.user.firstName }}</h1>
+<hr class="editorial-divider">
 
-<div class="row mt-4">
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <h3 class="display-4">{{ reservations|length }}</h3>
-                <p class="text-muted">Réservation(s)</p>
-                <a href="{{ path('app_profile_reservations') }}" class="btn btn-outline-primary btn-sm">Voir mes réservations</a>
-            </div>
+<div class="row g-4 mt-2">
+    <div class="col-md-4">
+        <div class="profile-stat">
+            <div class="stat-number">{{ reservations|length }}</div>
+            <div class="stat-label">Réservation{{ reservations|length > 1 ? 's' : '' }}</div>
+            <a href="{{ path('app_profile_reservations') }}" class="btn btn-editorial btn-editorial-outline btn-sm">Consulter</a>
         </div>
     </div>
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <h3 class="display-4">{{ favorites|length }}</h3>
-                <p class="text-muted">Favori(s)</p>
-                <a href="{{ path('app_profile_favorites') }}" class="btn btn-outline-primary btn-sm">Voir mes favoris</a>
-            </div>
+    <div class="col-md-4">
+        <div class="profile-stat">
+            <div class="stat-number">{{ favorites|length }}</div>
+            <div class="stat-label">Favori{{ favorites|length > 1 ? 's' : '' }}</div>
+            <a href="{{ path('app_profile_favorites') }}" class="btn btn-editorial btn-editorial-outline btn-sm">Consulter</a>
         </div>
     </div>
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <h3 class="display-4">{{ app.user.reviews|length }}</h3>
-                <p class="text-muted">Avis publié(s)</p>
-                <a href="{{ path('app_book_index') }}" class="btn btn-outline-primary btn-sm">Parcourir le catalogue</a>
-            </div>
+    <div class="col-md-4">
+        <div class="profile-stat">
+            <div class="stat-number">{{ app.user.reviews|length }}</div>
+            <div class="stat-label">Avis publié{{ app.user.reviews|length > 1 ? 's' : '' }}</div>
+            <a href="{{ path('app_book_index') }}" class="btn btn-editorial btn-editorial-outline btn-sm">Catalogue</a>
         </div>
     </div>
 </div>
 
 {% if reservations|length > 0 %}
-<h3 class="mt-4">Dernières réservations</h3>
-<div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Livre</th>
-                <th>Du</th>
-                <th>Au</th>
-                <th>Statut</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for reservation in reservations|slice(0, 5) %}
-                <tr>
-                    <td><a href="{{ path('app_book_show', {slug: reservation.book.slug}) }}">{{ reservation.book.title }}</a></td>
-                    <td>{{ reservation.startDate|date('d/m/Y') }}</td>
-                    <td>{{ reservation.endDate|date('d/m/Y') }}</td>
-                    <td><span class="badge {{ reservation.statusBadgeClass }}">{{ reservation.statusLabel }}</span></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="mt-5">
+    <span class="editorial-label">Historique</span>
+    <h3 class="mt-2">Dernières réservations</h3>
+    <hr class="editorial-divider">
+    <div class="table-responsive">
+        <table class="table table-editorial">
+            <thead>
+                <tr><th>Livre</th><th>Du</th><th>Au</th><th>Statut</th></tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations|slice(0, 5) %}
+                    <tr>
+                        <td><a href="{{ path('app_book_show', {slug: reservation.book.slug}) }}">{{ reservation.book.title }}</a></td>
+                        <td>{{ reservation.startDate|date('d/m/Y') }}</td>
+                        <td>{{ reservation.endDate|date('d/m/Y') }}</td>
+                        <td><span class="badge {{ reservation.statusBadgeClass }}">{{ reservation.statusLabel }}</span></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endif %}
 {% endblock %}

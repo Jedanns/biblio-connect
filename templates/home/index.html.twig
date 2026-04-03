@@ -1,34 +1,48 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}BiblioConnect - Votre bibliothèque en ligne{% endblock %}
+{% block title %}BiblioConnect — Votre bibliothèque en ligne{% endblock %}
 
 {% block body %}
-<section class="hero rounded-3 mb-5">
-    <div class="text-center">
-        <h1 class="display-4 fw-bold">Bienvenue sur BiblioConnect</h1>
-        <p class="lead mt-3">Votre plateforme de gestion de bibliothèque en ligne</p>
-        <div class="mt-4">
-            <a href="{{ path('app_book_index') }}" class="btn btn-light btn-lg me-2">Parcourir le catalogue</a>
-            {% if not app.user %}
-                <a href="{{ path('app_register') }}" class="btn btn-outline-light btn-lg">Créer un compte</a>
-            {% endif %}
+<section class="hero-editorial">
+    <div class="row align-items-center">
+        <div class="col-lg-7">
+            <span class="editorial-label">Bibliothèque en ligne</span>
+            <h1 class="mt-3">Explorez, réservez,<br>laissez-vous porter<br>par la lecture.</h1>
+            <p class="hero-subtitle">
+                Une collection soigneusement constituée, accessible en quelques clics.
+                Trouvez votre prochaine lecture et réservez-la depuis chez vous.
+            </p>
+            <div class="d-flex gap-3 mt-4">
+                <a href="{{ path('app_book_index') }}" class="btn btn-editorial btn-editorial-primary">Parcourir le catalogue</a>
+                {% if not app.user %}
+                    <a href="{{ path('app_register') }}" class="btn btn-editorial btn-editorial-outline">Créer un compte</a>
+                {% endif %}
+            </div>
         </div>
-        <p class="mt-3 opacity-75">{{ totalBooks }} ouvrages disponibles</p>
+        <div class="col-lg-4 offset-lg-1 mt-5 mt-lg-0 text-center">
+            <div class="hero-stat">{{ totalBooks }}</div>
+            <div class="hero-stat-label">ouvrages au catalogue</div>
+        </div>
     </div>
 </section>
 
+<hr class="editorial-divider" style="width: 100%; background: var(--color-border-light); margin: 3rem 0;">
+
 {% if latestBooks|length > 0 %}
 <section>
-    <h2 class="mb-4">Derniers ajouts</h2>
+    <div class="section-heading">
+        <div>
+            <span class="editorial-label">Nouveautés</span>
+            <h2 class="mt-2">Derniers ajouts</h2>
+        </div>
+        <a href="{{ path('app_book_index') }}" class="btn btn-editorial-ghost">Tout voir</a>
+    </div>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         {% for book in latestBooks %}
             <div class="col">
                 {% include '_partials/_book_card.html.twig' with {book: book} %}
             </div>
         {% endfor %}
-    </div>
-    <div class="text-center mt-4">
-        <a href="{{ path('app_book_index') }}" class="btn btn-outline-primary">Voir tout le catalogue</a>
     </div>
 </section>
 {% endif %}
