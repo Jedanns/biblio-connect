@@ -20,6 +20,5 @@
 ###< symfony/asset-mapper ###
 
 ###> project ###
-/public/uploads/covers/*
-!/public/uploads/covers/.gitkeep
+!/public/uploads/covers/cover-*.jpg
 ###< project ###
