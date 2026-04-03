@@ -26,12 +26,14 @@ body {
 }
 
 .book-card .card-img-top {
-    height: 250px;
-    object-fit: cover;
+    height: 350px;
+    object-fit: contain;
+    background-color: #f0f0f0;
+    padding: 0.5rem;
 }
 
 .book-card .card-img-placeholder {
-    height: 250px;
+    height: 350px;
     display: flex;
     align-items: center;
     justify-content: center;
