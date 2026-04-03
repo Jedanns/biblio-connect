@@ -5,7 +5,7 @@
 {% block body %}
 <section class="hero-editorial">
     <div class="row align-items-center">
-        <div class="col-lg-7">
+        <div class="col-lg-5">
             <span class="editorial-label">Bibliothèque en ligne</span>
             <h1 class="mt-3">Explorez, réservez,<br>laissez-vous porter<br>par la lecture.</h1>
             <p class="hero-subtitle">
@@ -19,9 +19,26 @@
                 {% endif %}
             </div>
         </div>
-        <div class="col-lg-4 offset-lg-1 mt-5 mt-lg-0 text-center">
-            <div class="hero-stat">{{ totalBooks }}</div>
-            <div class="hero-stat-label">ouvrages au catalogue</div>
+        <div class="col-lg-7 mt-5 mt-lg-0">
+            <div class="cover-marquee">
+                <div class="cover-marquee-track">
+                    {% for book in allBooks %}
+                        {% if book.coverImage %}
+                            <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="cover-marquee-item">
+                                <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" alt="{{ book.title }}">
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    {# Duplication pour boucle infinie #}
+                    {% for book in allBooks %}
+                        {% if book.coverImage %}
+                            <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="cover-marquee-item" aria-hidden="true">
+                                <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" alt="{{ book.title }}">
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </section>

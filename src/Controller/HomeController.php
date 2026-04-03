@@ -12,9 +12,11 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(BookRepository $bookRepository): Response
     {
+        $allBooks = $bookRepository->findBy([], ['createdAt' => 'DESC']);
+
         return $this->render('home/index.html.twig', [
-            'latestBooks' => $bookRepository->findLatestBooks(8),
-            'totalBooks' => $bookRepository->count(),
+            'latestBooks' => array_slice($allBooks, 0, 8),
+            'allBooks' => $allBooks,
         ]);
     }
 }

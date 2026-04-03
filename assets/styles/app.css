@@ -167,13 +167,14 @@ a:hover {
 
 /* --- Hero --- */
 .hero-editorial {
-    padding: 6rem 0 5rem;
+    padding: 5rem 0 4rem;
     text-align: left;
     position: relative;
+    overflow: hidden;
 }
 
 .hero-editorial h1 {
-    font-size: 3.5rem;
+    font-size: 3.2rem;
     font-weight: 700;
     line-height: 1.1;
     max-width: 600px;
@@ -182,28 +183,53 @@ a:hover {
 .hero-editorial .hero-subtitle {
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     color: var(--color-text-soft);
-    max-width: 480px;
+    max-width: 440px;
     margin-top: 1.5rem;
     line-height: 1.6;
 }
 
-.hero-editorial .hero-stat {
-    font-family: var(--font-display);
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    line-height: 1;
+/* --- Cover Marquee --- */
+.cover-marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    padding: 1rem 0;
 }
 
-.hero-editorial .hero-stat-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-text-mute);
-    margin-top: 0.5rem;
+.cover-marquee-track {
+    display: flex;
+    gap: 1.25rem;
+    width: max-content;
+    animation: marquee-scroll 35s linear infinite;
+}
+
+.cover-marquee:hover .cover-marquee-track {
+    animation-play-state: paused;
+}
+
+.cover-marquee-item {
+    flex-shrink: 0;
+    display: block;
+    transition: transform var(--transition);
+}
+
+.cover-marquee-item:hover {
+    transform: scale(1.08) translateY(-4px);
+}
+
+.cover-marquee-item img {
+    height: 220px;
+    width: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    object-fit: contain;
+}
+
+@keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 
 /* --- Cards --- */
