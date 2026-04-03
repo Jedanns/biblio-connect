@@ -1,3 +1,70 @@
+/* BiblioConnect - Custom Styles */
+
 body {
-    background-color: skyblue;
+    background-color: #f8f9fa;
+}
+
+/* Star rating display */
+.star-rating {
+    color: #ffc107;
+    font-size: 1.2rem;
+}
+
+.star-rating .star-empty {
+    color: #dee2e6;
+}
+
+/* Book card */
+.book-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+}
+
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.book-card .card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+.book-card .card-img-placeholder {
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+    font-size: 4rem;
+}
+
+/* Favorite button */
+.btn-favorite {
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-favorite:hover {
+    transform: scale(1.2);
+}
+
+/* Hero section */
+.hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 4rem 0;
+}
+
+/* Admin/Librarian dashboard stats */
+.stat-card {
+    border-left: 4px solid;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
 }

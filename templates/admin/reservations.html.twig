@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservations globales - BiblioConnect{% endblock %}
+
+{% block body %}
+<h1>Réservations globales</h1>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr><th>Utilisateur</th><th>Livre</th><th>Du</th><th>Au</th><th>Statut</th><th>Réservé le</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for r in reservations %}
+                <tr>
+                    <td>{{ r.user.fullName }}</td>
+                    <td>{{ r.book.title }}</td>
+                    <td>{{ r.startDate|date('d/m/Y') }}</td>
+                    <td>{{ r.endDate|date('d/m/Y') }}</td>
+                    <td><span class="badge {{ r.statusBadgeClass }}">{{ r.statusLabel }}</span></td>
+                    <td>{{ r.reservedAt|date('d/m/Y H:i') }}</td>
+                    <td>
+                        {% if r.status == 'pending' %}
+                            <form method="post" action="{{ path('app_admin_reservation_activate', {id: r.id}) }}" class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('activate' ~ r.id) }}">
+                                <button type="submit" class="btn btn-sm btn-success">Activer</button>
+                            </form>
+                        {% elseif r.status == 'active' %}
+                            <form method="post" action="{{ path('app_admin_reservation_return', {id: r.id}) }}" class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('return' ~ r.id) }}">
+                                <button type="submit" class="btn btn-sm btn-primary">Retour</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

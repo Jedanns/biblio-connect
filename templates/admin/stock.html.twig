@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Suivi des stocks - BiblioConnect{% endblock %}
+
+{% block body %}
+<h1>Suivi des stocks</h1>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr><th>Titre</th><th>Auteur</th><th>Total</th><th>Disponibles</th><th>Réservés</th><th>Statut</th></tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                {% set reserved = book.totalCopies - book.availableCopies %}
+                <tr class="{{ book.availableCopies == 0 ? 'table-danger' : (book.availableCopies <= 2 ? 'table-warning' : '') }}">
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.totalCopies }}</td>
+                    <td>{{ book.availableCopies }}</td>
+                    <td>{{ reserved }}</td>
+                    <td>
+                        {% if book.availableCopies == 0 %}
+                            <span class="badge bg-danger">Épuisé</span>
+                        {% elseif book.availableCopies <= 2 %}
+                            <span class="badge bg-warning text-dark">Stock faible</span>
+                        {% else %}
+                            <span class="badge bg-success">OK</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if pendingReservations|length > 0 %}
+<h3 class="mt-4">Réservations en attente ({{ pendingReservations|length }})</h3>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead><tr><th>Utilisateur</th><th>Livre</th><th>Du</th><th>Au</th><th>Réservé le</th></tr></thead>
+        <tbody>
+            {% for r in pendingReservations %}
+                <tr>
+                    <td>{{ r.user.fullName }}</td>
+                    <td>{{ r.book.title }}</td>
+                    <td>{{ r.startDate|date('d/m/Y') }}</td>
+                    <td>{{ r.endDate|date('d/m/Y') }}</td>
+                    <td>{{ r.reservedAt|date('d/m/Y H:i') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

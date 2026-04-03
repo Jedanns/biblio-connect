@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ author.fullName }} - BiblioConnect{% endblock %}
+
+{% block body %}
+<h1>Modifier : {{ author.fullName }}</h1>
+<div class="card"><div class="card-body">
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">{{ form_row(form.firstName) }}</div>
+            <div class="col-md-6">{{ form_row(form.lastName) }}</div>
+        </div>
+        {{ form_row(form.biography) }}
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{{ path('app_librarian_authors') }}" class="btn btn-outline-secondary ms-2">Annuler</a>
+    {{ form_end(form) }}
+</div></div>
+{% endblock %}

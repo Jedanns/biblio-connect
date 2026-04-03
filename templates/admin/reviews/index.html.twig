@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modération des avis - BiblioConnect{% endblock %}
+
+{% block body %}
+<h1>Modération des avis</h1>
+
+{% if reviews|length > 0 %}
+    {% for review in reviews %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <strong>{{ review.user.fullName }}</strong> sur
+                        <em>{{ review.book.title }}</em>
+                        <span class="text-muted ms-2">{{ review.createdAt|date('d/m/Y H:i') }}</span>
+                        <div class="mt-1">
+                            {% include '_partials/_star_rating.html.twig' with {rating: review.rating} %}
+                        </div>
+                        {% if review.comment %}
+                            <p class="mt-2 mb-0">{{ review.comment }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex gap-2">
+                        <form method="post" action="{{ path('app_admin_review_approve', {id: review.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ review.id) }}">
+                            <button type="submit" class="btn btn-sm btn-success">Approuver</button>
+                        </form>
+                        <form method="post" action="{{ path('app_admin_review_reject', {id: review.id}) }}"
+                              onsubmit="return confirm('Supprimer cet avis ?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ review.id) }}">
+                            <button type="submit" class="btn btn-sm btn-danger">Rejeter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-success">Aucun avis en attente de modération.</div>
+{% endif %}
+{% endblock %}

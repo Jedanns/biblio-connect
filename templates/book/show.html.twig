@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ book.title }} - BiblioConnect{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-4">
+        {% if book.coverImage %}
+            <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" class="img-fluid rounded shadow-sm" alt="{{ book.title }}">
+        {% else %}
+            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 400px; font-size: 6rem;">
+                📖
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-8">
+        <h1>{{ book.title }}</h1>
+        <p class="lead text-muted">par {{ book.author.fullName }}</p>
+
+        {% if book.averageRating %}
+            <div class="mb-3">
+                {% include '_partials/_star_rating.html.twig' with {rating: book.averageRating} %}
+                <span class="text-muted ms-2">({{ book.approvedReviews|length }} avis)</span>
+            </div>
+        {% endif %}
+
+        <div class="mb-3">
+            {% for category in book.categories %}
+                <span class="badge bg-secondary me-1">{{ category.name }}</span>
+            {% endfor %}
+            <span class="badge bg-info">{{ book.language.name }}</span>
+        </div>
+
+        <table class="table table-sm" style="max-width: 400px;">
+            {% if book.isbn %}
+                <tr><th>ISBN</th><td>{{ book.isbn }}</td></tr>
+            {% endif %}
+            {% if book.publicationDate %}
+                <tr><th>Publication</th><td>{{ book.publicationDate|date('d/m/Y') }}</td></tr>
+            {% endif %}
+            {% if book.pageCount %}
+                <tr><th>Pages</th><td>{{ book.pageCount }}</td></tr>
+            {% endif %}
+            <tr>
+                <th>Disponibilité</th>
+                <td>
+                    {% if book.availableCopies > 0 %}
+                        <span class="text-success fw-bold">{{ book.availableCopies }}/{{ book.totalCopies }} disponible(s)</span>
+                    {% else %}
+                        <span class="text-danger fw-bold">Indisponible</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        {% if book.description %}
+            <h5 class="mt-4">Description</h5>
+            <p>{{ book.description|nl2br }}</p>
+        {% endif %}
+
+        <div class="mt-4 d-flex gap-2">
+            {% if app.user %}
+                {% if book.availableCopies > 0 %}
+                    <a href="{{ path('app_reservation_new', {id: book.id}) }}" class="btn btn-primary">Réserver</a>
+                {% endif %}
+
+                <form method="post" action="{{ path('app_favorite_toggle', {id: book.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('favorite' ~ book.id) }}">
+                    <button type="submit" class="btn {{ isFavorited ? 'btn-warning' : 'btn-outline-warning' }}">
+                        {{ isFavorited ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+                    </button>
+                </form>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-outline-primary">Connectez-vous pour réserver</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{# Section Reviews #}
+<hr class="my-5">
+<h3>Avis des lecteurs</h3>
+
+{% if app.user and not hasReviewed %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5>Laisser un avis</h5>
+            <form method="post" action="{{ path('app_review_new', {bookId: book.id}) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('review' ~ book.id) }}">
+                <div class="mb-3">
+                    <label class="form-label">Note</label>
+                    <div class="star-rating">
+                        {% for i in 1..5 %}
+                            <label class="form-check-label me-1">
+                                <input type="radio" name="rating" value="{{ i }}" class="form-check-input" {{ i == 5 ? 'checked' : '' }} required>
+                                {{ i }} &#9733;
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Commentaire (optionnel)</label>
+                    <textarea name="comment" id="comment" class="form-control" rows="3" maxlength="2000"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Publier l'avis</button>
+            </form>
+        </div>
+    </div>
+{% endif %}
+
+{% set approvedReviews = book.approvedReviews %}
+{% if approvedReviews|length > 0 %}
+    {% for review in approvedReviews %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <strong>{{ review.user.fullName }}</strong>
+                        <span class="text-muted ms-2">{{ review.createdAt|date('d/m/Y') }}</span>
+                    </div>
+                    {% include '_partials/_star_rating.html.twig' with {rating: review.rating} %}
+                </div>
+                {% if review.comment %}
+                    <p class="mb-0">{{ review.comment|nl2br }}</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-muted">Aucun avis pour cet ouvrage.</p>
+{% endif %}
+{% endblock %}

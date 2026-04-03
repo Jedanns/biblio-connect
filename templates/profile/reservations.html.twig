@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes réservations - BiblioConnect{% endblock %}
+
+{% block body %}
+<h1>Mes réservations</h1>
+
+{% if reservations|length > 0 %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Livre</th>
+                <th>Réservé le</th>
+                <th>Du</th>
+                <th>Au</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    <td><a href="{{ path('app_book_show', {slug: reservation.book.slug}) }}">{{ reservation.book.title }}</a></td>
+                    <td>{{ reservation.reservedAt|date('d/m/Y') }}</td>
+                    <td>{{ reservation.startDate|date('d/m/Y') }}</td>
+                    <td>{{ reservation.endDate|date('d/m/Y') }}</td>
+                    <td><span class="badge {{ reservation.statusBadgeClass }}">{{ reservation.statusLabel }}</span></td>
+                    <td>
+                        {% if reservation.status == 'pending' %}
+                            <form method="post" action="{{ path('app_reservation_cancel', {id: reservation.id}) }}" class="d-inline"
+                                  onsubmit="return confirm('Annuler cette réservation ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ reservation.id) }}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Annuler</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <div class="alert alert-info">Vous n'avez aucune réservation.</div>
+{% endif %}
+{% endblock %}

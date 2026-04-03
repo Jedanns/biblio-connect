@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des auteurs - BiblioConnect{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Gestion des auteurs</h1>
+    <a href="{{ path('app_librarian_author_new') }}" class="btn btn-primary">Ajouter un auteur</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead><tr><th>Nom</th><th>Livres</th><th>Actions</th></tr></thead>
+        <tbody>
+            {% for author in authors %}
+                <tr>
+                    <td>{{ author.fullName }}</td>
+                    <td>{{ author.books|length }}</td>
+                    <td>
+                        <a href="{{ path('app_librarian_author_edit', {id: author.id}) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

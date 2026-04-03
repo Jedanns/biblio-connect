@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace Bibliothécaire - BiblioConnect{% endblock %}
+
+{% block body %}
+<h1>Espace Bibliothécaire</h1>
+
+<div class="row mt-4 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card" style="border-left-color: #0d6efd;">
+            <div class="card-body">
+                <h5 class="text-muted">Livres au catalogue</h5>
+                <h2>{{ totalBooks }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card" style="border-left-color: #ffc107;">
+            <div class="card-body">
+                <h5 class="text-muted">Réservations en attente</h5>
+                <h2>{{ pendingReservations|length }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Livres</h5>
+                <p class="card-text">Gérer le catalogue de livres.</p>
+                <a href="{{ path('app_librarian_books') }}" class="btn btn-primary">Gérer les livres</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Auteurs</h5>
+                <p class="card-text">Gérer les auteurs du catalogue.</p>
+                <a href="{{ path('app_librarian_authors') }}" class="btn btn-primary">Gérer les auteurs</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Catégories</h5>
+                <p class="card-text">Gérer les catégories.</p>
+                <a href="{{ path('app_librarian_categories') }}" class="btn btn-primary">Gérer les catégories</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if pendingReservations|length > 0 %}
+<h3 class="mt-4">Réservations en attente</h3>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead><tr><th>Utilisateur</th><th>Livre</th><th>Du</th><th>Au</th><th>Réservé le</th></tr></thead>
+        <tbody>
+            {% for r in pendingReservations %}
+                <tr>
+                    <td>{{ r.user.fullName }}</td>
+                    <td>{{ r.book.title }}</td>
+                    <td>{{ r.startDate|date('d/m/Y') }}</td>
+                    <td>{{ r.endDate|date('d/m/Y') }}</td>
+                    <td>{{ r.reservedAt|date('d/m/Y H:i') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

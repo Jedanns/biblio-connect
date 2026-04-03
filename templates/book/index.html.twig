@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue - BiblioConnect{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Catalogue</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        {{ form_start(searchForm, {'attr': {'class': 'row g-3 align-items-end'}}) }}
+            <div class="col-md-4">
+                {{ form_row(searchForm.query) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(searchForm.category) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(searchForm.author) }}
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Rechercher</button>
+            </div>
+        {{ form_end(searchForm) }}
+    </div>
+</div>
+
+{% if books|length > 0 %}
+    <p class="text-muted">{{ books|length }} résultat{{ books|length > 1 ? 's' : '' }}</p>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        {% for book in books %}
+            <div class="col">
+                {% include '_partials/_book_card.html.twig' with {book: book} %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Aucun ouvrage trouvé. Essayez de modifier vos critères de recherche.
+    </div>
+{% endif %}
+{% endblock %}
