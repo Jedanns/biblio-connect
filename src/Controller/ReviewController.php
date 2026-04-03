@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Entity\Review;
+use App\Repository\BookRepository;
 use App\Repository\ReviewRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,44 +20,36 @@ class ReviewController extends AbstractController
     public function create(
         int $bookId,
         Request $request,
+        BookRepository $bookRepository,
         ReviewRepository $reviewRepository,
         EntityManagerInterface $em,
     ): Response {
-        $book = $em->getRepository(Book::class)->find($bookId);
-        if (!$book) {
-            throw $this->createNotFoundException();
-        }
+        $book = $bookRepository->find($bookId) ?? throw $this->createNotFoundException();
+        $redirect = $this->redirectToRoute('app_book_show', ['slug' => $book->getSlug()]);
 
         if ($reviewRepository->findByUserAndBook($this->getUser(), $book)) {
             $this->addFlash('error', 'Vous avez déjà laissé un avis pour ce livre.');
-            return $this->redirectToRoute('app_book_show', ['slug' => $book->getSlug()]);
+            return $redirect;
         }
 
         if (!$this->isCsrfTokenValid('review' . $book->getId(), $request->get('_token'))) {
             throw $this->createAccessDeniedException();
         }
 
-        $rating = (int) $request->request->get('rating');
-        if ($rating < 1 || $rating > 5) {
-            $this->addFlash('error', 'La note doit être entre 1 et 5.');
-            return $this->redirectToRoute('app_book_show', ['slug' => $book->getSlug()]);
-        }
+        $rating = max(1, min(5, (int) $request->request->get('rating')));
+        $comment = $request->request->get('comment');
 
         $review = new Review();
         $review->setUser($this->getUser());
         $review->setBook($book);
         $review->setRating($rating);
-
-        $comment = $request->request->get('comment');
-        if ($comment) {
-            $review->setComment(substr(strip_tags($comment), 0, 2000));
-        }
+        $review->setComment($comment ? mb_substr(strip_tags($comment), 0, 2000) : null);
 
         $em->persist($review);
         $em->flush();
 
         $this->addFlash('success', 'Votre avis a été soumis et sera visible après modération.');
 
-        return $this->redirectToRoute('app_book_show', ['slug' => $book->getSlug()]);
+        return $redirect;
     }
 }

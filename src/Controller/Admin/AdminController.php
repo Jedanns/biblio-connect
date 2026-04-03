@@ -37,8 +37,6 @@ class AdminController extends AbstractController
         ]);
     }
 
-    // ========== USERS ==========
-
     #[Route('/users', name: 'app_admin_users')]
     public function users(UserRepository $userRepository): Response
     {
@@ -64,8 +62,6 @@ class AdminController extends AbstractController
             'user' => $user,
         ]);
     }
-
-    // ========== REVIEWS MODERATION ==========
 
     #[Route('/reviews', name: 'app_admin_reviews')]
     public function reviews(ReviewRepository $reviewRepository): Response
@@ -103,8 +99,6 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin_reviews');
     }
 
-    // ========== STOCK ==========
-
     #[Route('/stock', name: 'app_admin_stock')]
     public function stock(BookRepository $bookRepository, ReservationRepository $reservationRepository): Response
     {
@@ -113,8 +107,6 @@ class AdminController extends AbstractController
             'pendingReservations' => $reservationRepository->findPendingReservations(),
         ]);
     }
-
-    // ========== RESERVATIONS ==========
 
     #[Route('/reservations', name: 'app_admin_reservations')]
     public function reservations(ReservationRepository $reservationRepository): Response

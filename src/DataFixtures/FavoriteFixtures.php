@@ -13,7 +13,6 @@ class FavoriteFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        // Each user gets 3 favorite books (non-overlapping)
         for ($userIndex = 0; $userIndex < 10; $userIndex++) {
             for ($j = 0; $j < 3; $j++) {
                 $bookIndex = ($userIndex * 3 + $j) % 30;

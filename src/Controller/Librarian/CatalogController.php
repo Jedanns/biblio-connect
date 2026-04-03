@@ -36,7 +36,6 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    // ========== BOOKS ==========
 
     #[Route('/books', name: 'app_librarian_books')]
     public function bookList(BookRepository $bookRepository): Response
@@ -133,7 +132,6 @@ class CatalogController extends AbstractController
         return $this->redirectToRoute('app_librarian_books');
     }
 
-    // ========== AUTHORS ==========
 
     #[Route('/authors', name: 'app_librarian_authors')]
     public function authorList(AuthorRepository $authorRepository): Response
@@ -178,7 +176,6 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    // ========== CATEGORIES ==========
 
     #[Route('/categories', name: 'app_librarian_categories')]
     public function categoryList(CategoryRepository $categoryRepository): Response
@@ -232,7 +229,6 @@ class CatalogController extends AbstractController
         ]);
     }
 
-    // ========== RESERVATIONS ==========
 
     #[Route('/reservations', name: 'app_librarian_reservations')]
     public function reservationHistory(ReservationRepository $reservationRepository): Response
